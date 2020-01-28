@@ -1,12 +1,11 @@
-from flask import Flask 
+from flask import Flask, redirect, render_template, request, session, abort 
 
-variavelweb = Flask(__name__)
+app = Flask(__name__)
 
-@variavelweb.route("/")
-
+@app.route("/")
 def hello():
-	return "hello world"
+	return render_template('/public/index.html')
 
 if __name__ == "__main__":
-	variavelweb.run()
+	app.run()
 
