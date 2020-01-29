@@ -1,110 +1,59 @@
-<!DOCTYPE HTML>
-
-<html lang=”pt-br”>
-
+<html>
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <title>Clinico - SimplificaIA</title>
-
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="./css/bootstrap.css">
-  <link rel="stylesheet" href="./css/font-awesome.css">
-  <link rel="stylesheet" href="./css/styles.css">
-
-  <link rel="stylesheet" href="./fullcalendar/packages/core/main.css">
-  <link rel="stylesheet" href="./fullcalendar/packages/daygrid/main.css">
-  <link rel="stylesheet" href="./fullcalendar/packages/bootstrap/main.css">
-
-  <link rel="import" slot="dashboard" target="pills-content" href="./pages/dashboard.html">
-  <link rel="import" slot="agendas" target="pills-content" href="./pages/agendas.html">
-  <link rel="import" slot="messages" target="pills-content" href="./pages/messages.html">
-
-  <link rel="import" slot="clinicas" target="pills-content" href="./pages/clinicas.html">
-  <link rel="import" slot="profissionais" target="pills-content" href="./pages/profissionais.html">
-  <link rel="import" slot="parceiros" target="pills-content" href="./pages/parceiros.html">
-  <link rel="import" slot="pacientes" target="pills-content" href="./pages/pacientes.html">
-  <link rel="import" slot="financeiro" target="pills-content" href="./pages/financeiro.html">
-
-  <link rel="import" slot="alert" target="div-message" href="./components/alert.html">
-  <link rel="import" slot="menu" target="menu-le" href="./components/menu.html">
-  <link rel="import" slot="footer" target="footer-bp" href="./components/footer.html">
+  <base href="/">
+  <title>Watson Assistant Chat App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:image" content="conversation.svg" />
+  <meta property="og:title" content="Conversation Chat Simple" />
+  <meta property="og:description" content="Sample application that shows how to use the Watson Assistant API to identify user intents" />
+  <link rel="shortcut icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 
 <body>
-  <!-- Header Dados de apresentação da tela e o menu de comunícação direta para o usuário -->
-  <header class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary rounded">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-le">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <ul class="nav navbar-nav mr-auto">
-        <li class="nav-item rm-1">
-          <img src="./favicon.ico" style="max-width: 10%; height: auto;" alt="logotipo">
-          <a class="navbar-brand" href="#">Clinico - SimplificaIA</a>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-nav mr-auto">
-        <li class="nav-item rm-1">
-          <span id="header-user">User: </span>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item rm-1">
-          <button id="log-out-sys" class="btn btn-outline-light">
-            <i class="fa fa-sign-out mr-1" style="font-size:24px;" aria-hidden="true"></i>
-          </button>
-        </li>
-      </ul>
-    </nav>
-  </header>
-
-  <main class="container-fluid" id="main-content">
-    <div class="row ml-0 my-2" tabindex="1">
-      <!-- Conteudo do menu Import -->
-      <div class="col-2 bg-gradient-light rounded collapse navbar-collapse d-md-block" id="menu-le">
-
-      </div>
-
-      <!-- Conteudo do forms Import -->
-      <div class="tab-content col-10 container-fluid" tabindex="-1" id="pills-content">
-        <div id="div-message" aria-live="polite" aria-atomic="true"
-          class="d-flex justify-content-center align-items-center position-relative">
+  <div id="view-change-button" class="button" onclick="PayloadPanel.togglePanel(event, this)">
+    <img class="option full" src="../img/Chat Button.png">
+    <img class="option not-full" src="../img/Code Button.png">
+  </div>
+  <div id="contentParent" class="responsive-columns-wrapper">
+    <div id="chat-column-holder" class="responsive-column content-column">
+      <div class="chat-column">
+        <div id="scrollingChat"></div>
+        <p class="user-typing" id="user-typing-field"></p>
+        <label for="textInput" class="inputOutline">
+          <input id="textInput" class="input responsive-column" placeholder="Type something" type="text" onkeydown="ConversationPanel.inputKeyDown(event, this)"
+            autofocus>
+        </label>
+        <div class="disclaimer">
+          * This system is for demonstration purposes only and is not intended to process Personal Data. No Personal
+          Data is to be entered
+          into this system as it may not have the necessary controls in place to meet the requirements of the General
+          Data Protection
+          Regulation (EU) 2016/679.
         </div>
-
+        <div class="disclaimer">
+          By using this application, you agree to the&nbsp;
+          <a target="_blank" rel="noreferrer noopener" href="https://watson-developer-cloud.github.io/terms?name=Watson%20Assistant%20Demo">
+            Terms of Use
+          </a>
+        </div>
       </div>
     </div>
+    <div id="payload-column" class="fixed-column content-column">
+      <div id="payload-initial-message">
+        Type something to see the output
+      </div>
+      <div id="payload-request" class="payload"></div>
+      <div id="payload-response" class="payload"></div>
+    </div>
+  </div>
 
-  </main>
-  <footer class="container-fluid">
-    <nav class="navbar navbar-expand-lg bg-gradient-secondary rounded" id="footer-bp">
-
-    </nav>
-  </footer>
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="./js/jquery.js"></script>
-  <script src="./js/popper.js"></script>
-  <script src="./js/bootstrap.js"></script>
-
-  <script src='./fullcalendar/packages/core/main.js'></script>
-  <script src='./fullcalendar/packages/interaction/main.js'></script>
-  <script src='./fullcalendar/packages/daygrid/main.js'></script>
-  <script src='./fullcalendar/packages/bootstrap/main.js'></script>
-  <script src='./fullcalendar/packages/moment/main.js'></script>
-  <script src='./fullcalendar/packages/moment-timezone/main.js'></script>
-  <script src='./fullcalendar/packages/core/locales/pt-br.js'></script>
-
-  <script src="./canvasjs/canvasjs.min.js"></script>
-
-  <script type="module" src="./js/afirmanet.js"></script>
-
+  <script src="js/common.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/conversation.js"></script>
+  <script src="js/payload.js"></script>
+  <script src="js/global.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/watson-developer-cloud/watson-developer-cloud.github.io/master/analytics.js"></script>
 </body>
-
 </html>
