@@ -46,11 +46,12 @@ var assistant = new AssistantV2({
   version: '2019-02-28',
   authenticator: authenticator,
   url: process.env.ASSISTANT_URL,
-  disableSslVerification: process.env.DISABLE_SSL_VERIFICATION === 'true' ? true : false
+  disableSslVerification: process.env.DISABLE_SSL_VERIFICATION === 'true' ? true : false,
+  qs: { timezone: process.env.TZ }
 });
 
 // Endpoint to be call from the client side
-app.post('/api/message', function(req, res) {
+app.post('/api/message', function (req, res) {
   let assistantId = process.env.ASSISTANT_ID || '<assistant-id>';
   if (!assistantId || assistantId === '<assistant-id>') {
     return res.json({
@@ -66,13 +67,21 @@ app.post('/api/message', function(req, res) {
 
   var textIn = '';
 
-  if (req.body.input) {
+
+  if (req.body.input && req.body.input.text.length > 0) {
     textIn = req.body.input.text;
   }
 
   var payload = {
     assistantId: assistantId,
     sessionId: req.body.session_id,
+    context: {
+      timezone: process.env.TZ,
+      manha: true,
+      noite: false,
+      tarde: false,
+      madrugada: false
+    },
     input: {
       message_type: 'text',
       text: textIn,
@@ -80,7 +89,7 @@ app.post('/api/message', function(req, res) {
   };
 
   // Send the input to the assistant service
-  assistant.message(payload, function(err, data) {
+  assistant.message(payload, function (err, data) {
     if (err) {
       const status = err.code !== undefined && err.code > 0 ? err.code : 500;
       return res.status(status).json(err);
@@ -90,12 +99,12 @@ app.post('/api/message', function(req, res) {
   });
 });
 
-app.get('/api/session', function(req, res) {
+app.get('/api/session', function (req, res) {
   assistant.createSession(
     {
       assistantId: process.env.ASSISTANT_ID || '{assistant_id}',
     },
-    function(error, response) {
+    function (error, response) {
       if (error) {
         return res.send(error);
       } else {
