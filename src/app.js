@@ -17,6 +17,8 @@
 
 'use strict';
 
+import { insert } from './api/daos/assistantDAO'
+
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var AssistantV2 = require('ibm-watson/assistant/v2'); // watson sdk
@@ -75,16 +77,14 @@ app.post('/api/message', function (req, res) {
   var payload = {
     assistantId: assistantId,
     sessionId: req.body.session_id,
-    context: {
-      timezone: process.env.TZ,
-      manha: true,
-      noite: false,
-      tarde: false,
-      madrugada: false
-    },
     input: {
       message_type: 'text',
       text: textIn,
+      options: {
+        alternate_intents: true,
+        debug: true,
+        return_context: true
+      }
     },
   };
 
@@ -94,6 +94,16 @@ app.post('/api/message', function (req, res) {
       const status = err.code !== undefined && err.code > 0 ? err.code : 500;
       return res.status(status).json(err);
     }
+
+    let dadosAssistant = {
+      assistantId: payload.assistantId,
+      sessionId: payload.sessionId,
+      input: payload.input,
+      context: data.result.context,
+      output: data.result.output
+    }
+
+    insert(dadosAssistant)
 
     return res.json(data);
   });
