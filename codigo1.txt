@@ -1,0 +1,5 @@
+"context": {
+    "esporte":null,
+    "date":null,
+    "time": null
+  }

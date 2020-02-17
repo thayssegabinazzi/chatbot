@@ -1,0 +1,9 @@
+Olá, meu nome é Jaque e sou a assistênte Chatbot esportiva.  
+Estou aqui para te auxiliar em suas dúvidas sobre horários, datas, serviços e reservas disponíveis em nosso estabelecimento.
+
+
+
+<? @sys-date.reformatDateTime('dd/MM/yyyy') ?>  
+<? @sys-time.reformatDateTime('hh:mm') ?>. 
+
+"context_eraser": "<? context.clear() ?>"
