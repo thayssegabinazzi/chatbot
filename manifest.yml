@@ -1,6 +1,7 @@
 applications:
-- name: watson-assistant-simple
+- name: thays-chatbot
   command: npm start
   path: .
-  memory: 256M
+  memory: 128M
+  random-route: true
   instances: 1
