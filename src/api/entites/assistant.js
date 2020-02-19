@@ -5,7 +5,7 @@ const timeZone = require('mongoose-timezone');
 
 const colection = new Schema({
     assistantId: { type: String },
-    session_id: { type: String },
+    sessionId: { type: String },
     input: { type: Object },
     output: { type: Object },
     context: { type: Object },
